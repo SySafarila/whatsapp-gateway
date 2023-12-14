@@ -5,6 +5,7 @@ services:
       context: .
     environment:
       NODE_ENV: production
+      IS_DOCKER: true
     ports:
       - 3000:3000
     volumes:

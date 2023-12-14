@@ -7,15 +7,27 @@ const app = express();
 const port = process.env.APP_PORT ?? 3000;
 let whatsapp_qr_url = null;
 let whatsapp_authenticated = false;
+let client;
 
-const client = new Client({
-  authStrategy: new LocalAuth(),
-  // remove comments below for docker
-  // puppeteer: {
-  //   executablePath: "/usr/bin/google-chrome",
-  //   args: ["--disable-gpu", "--no-sandbox"],
-  // },
-});
+if (process.env.IS_DOCKER == "true") {
+  client = new Client({
+    authStrategy: new LocalAuth(),
+    // remove comments below for docker
+    puppeteer: {
+      executablePath: "/usr/bin/google-chrome",
+      args: ["--disable-gpu", "--no-sandbox"],
+    },
+  });
+} else {
+  client = new Client({
+    authStrategy: new LocalAuth(),
+    // remove comments below for docker
+    // puppeteer: {
+    //   executablePath: "/usr/bin/google-chrome",
+    //   args: ["--disable-gpu", "--no-sandbox"],
+    // },
+  });
+}
 
 // express
 app.use(express.json());
@@ -45,6 +57,8 @@ app.post("/logout", async (req, res) => {
   }
   res.json("Not authenticated");
 });
+
+// done
 app.post("/send-message", async (req, res) => {
   if (!whatsapp_authenticated) {
     return res.json("Not authenticated");
@@ -88,12 +102,17 @@ client.on("disconnected", async (reason) => {
   client.initialize();
 });
 
+// done
 client.on("qr", (qr) => {
   QRCode.toDataURL(qr, (err, url) => {
     whatsapp_qr_url = url;
   });
   console.log(`QR = ${qr}`);
 });
+
+// client.on('auth_failure', () => {
+//   console.error('auth failure')
+// })
 
 client.initialize();
 
