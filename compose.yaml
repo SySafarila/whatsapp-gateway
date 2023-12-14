@@ -1,5 +1,6 @@
 services:
   server:
+    restart: always
     build:
       context: .
     environment:
@@ -7,5 +8,5 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./temp:home/node/wwebjs/.wwebjs_auth:rw
-      - ./temp:home/node/wwebjs/.wwebjs_cache:rw
+      - ./temp:/home/node/wwebjs/.wwebjs_auth:rw
+      - ./temp:/home/node/wwebjs/.wwebjs_cache:rw

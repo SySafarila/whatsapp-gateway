@@ -78,6 +78,7 @@ client.on("disconnected", () => {
   try {
     client.destroy();
     client.initialize();
+    console.log('disconnected');
   } catch (error) {
     console.log(error.message);
   }
