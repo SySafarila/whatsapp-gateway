@@ -8,13 +8,13 @@ const port = process.env.APP_PORT ?? 3000;
 let whatsapp_qr_url = null;
 let whatsapp_authenticated = false;
 
-// remove puppeteer if you are using windows
 const client = new Client({
   authStrategy: new LocalAuth(),
-  puppeteer: {
-    executablePath: "/usr/bin/google-chrome",
-    args: ["--disable-gpu", "--no-sandbox"],
-  },
+  // remove comments below for docker
+  // puppeteer: {
+  //   executablePath: "/usr/bin/google-chrome",
+  //   args: ["--disable-gpu", "--no-sandbox"],
+  // },
 });
 
 // express
@@ -28,10 +28,16 @@ app.post("/login", (req, res) => {
   }
   res.json(whatsapp_qr_url ?? "Qr not ready yet");
 });
-app.post("/logout", (req, res) => {
+
+// done
+app.post("/logout", async (req, res) => {
   if (whatsapp_authenticated) {
     try {
-      client.logout();
+      await client.logout();
+      client.initialize();
+      whatsapp_authenticated = false;
+      whatsapp_qr_url = null;
+      console.log("logout success");
       return res.json("Logout success");
     } catch (error) {
       return res.json("logout failed");
@@ -63,25 +69,23 @@ app.listen(port, () => {
   console.log(`Running on port ${port}`);
 });
 
+// done
 client.on("ready", () => {
   console.log("Whatsapp client is ready!");
 });
 
+// done
 client.on("authenticated", () => {
   whatsapp_authenticated = true;
   console.log("Whatsapp client is authenticated!");
 });
 
-client.on("disconnected", () => {
+// done
+client.on("disconnected", async (reason) => {
+  console.log(`Client disconnected with reason: ${reason}`);
   whatsapp_qr_url = null;
   whatsapp_authenticated = false;
-  try {
-    client.destroy();
-    client.initialize();
-    console.log('disconnected');
-  } catch (error) {
-    console.log(error.message);
-  }
+  client.initialize();
 });
 
 client.on("qr", (qr) => {
