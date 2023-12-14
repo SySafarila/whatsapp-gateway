@@ -72,6 +72,17 @@ client.on("authenticated", () => {
   console.log("Whatsapp client is authenticated!");
 });
 
+client.on("disconnected", () => {
+  whatsapp_qr_url = null;
+  whatsapp_authenticated = false;
+  try {
+    client.destroy();
+    client.initialize();
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 client.on("qr", (qr) => {
   QRCode.toDataURL(qr, (err, url) => {
     whatsapp_qr_url = url;

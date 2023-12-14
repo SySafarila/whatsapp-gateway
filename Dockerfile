@@ -18,3 +18,5 @@ RUN npm install
 EXPOSE 3000
 
 CMD [ "node", "index.js" ]
+
+# https://github.com/pedroslopez/whatsapp-web.js/issues/2168#issuecomment-1535444083

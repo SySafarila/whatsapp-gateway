@@ -6,3 +6,6 @@ services:
       NODE_ENV: production
     ports:
       - 3000:3000
+    volumes:
+      - ./temp:home/node/wwebjs/.wwebjs_auth:rw
+      - ./temp:home/node/wwebjs/.wwebjs_cache:rw
