@@ -18,6 +18,6 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "phone_number": "6282117694132x",
+    "phone_number": "6282117694132",
     "message": "Hello world!"
 }

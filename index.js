@@ -10,6 +10,9 @@ let whatsapp_authenticated = false;
 
 const client = new Client({
   authStrategy: new LocalAuth(),
+  puppeteer: {
+    args: ["--no-sandbox"],
+  },
 });
 
 // express
