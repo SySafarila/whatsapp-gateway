@@ -8,10 +8,12 @@ const port = process.env.APP_PORT ?? 3000;
 let whatsapp_qr_url = null;
 let whatsapp_authenticated = false;
 
+// remove puppeteer if you are using windows
 const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
-    args: ["--no-sandbox"],
+    executablePath: "/usr/bin/google-chrome",
+    args: ["--disable-gpu", "--no-sandbox"],
   },
 });
 
