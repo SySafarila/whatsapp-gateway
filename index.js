@@ -60,6 +60,7 @@ app.post("/logout", async (req, res) => {
       console.log("logout success");
       return res.json("Logout success");
     } catch (error) {
+      res.status(500);
       return res.json("logout failed");
     }
   }
@@ -74,6 +75,7 @@ app.post("/send-message", async (req, res) => {
 
   const { phone_number, message } = req.body;
   if (!phone_number || !message) {
+    res.status(400);
     return res.json("{phone_numnber} or {message} are required");
   }
 
@@ -83,6 +85,7 @@ app.post("/send-message", async (req, res) => {
     console.log(`SEND STATUS: ${send.fromMe}`);
     return res.json(`SEND STATUS: ${send.fromMe}`);
   } catch (error) {
+    res.status(400);
     return res.json(`Failed, error: ${error.message}`);
   }
 });
