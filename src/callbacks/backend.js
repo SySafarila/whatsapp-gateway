@@ -1,5 +1,4 @@
-import { status } from "../clients.js";
-import { client as whatsapp } from "../clients.js";
+import { status, client as whatsapp } from "../clients.js";
 
 export const root = (req, res) => {
   res.json("Hello world!");
