@@ -18,8 +18,6 @@ export const logout = async (req, res) => {
     try {
       await whatsapp.logout();
       whatsapp.initialize();
-      // set_whatsapp_authenticated(false);
-      // set_whatsapp_qr_url(null);
       status.set_auth = false
       status.set_qr = null
       console.log("logout success");

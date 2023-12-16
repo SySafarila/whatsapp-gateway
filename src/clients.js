@@ -20,6 +20,5 @@ if (process.env.IS_DOCKER == "true") {
   };
 }
 
-// for docker/linux host
 export const client = new Client(clientOptions);
 export const status = new Status();
