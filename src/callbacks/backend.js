@@ -18,8 +18,8 @@ export const logout = async (req, res) => {
     try {
       await whatsapp.logout();
       whatsapp.initialize();
-      status.set_auth = false
-      status.set_qr = null
+      status.set_auth = false;
+      status.set_qr = null;
       console.log("logout success");
       return res.json("Logout success");
     } catch (error) {
@@ -27,11 +27,13 @@ export const logout = async (req, res) => {
       return res.json("logout failed");
     }
   }
+  res.status(401);
   res.json("Not authenticated");
 };
 
 export const send_message = async (req, res) => {
   if (!status.whatsapp_authenticated) {
+    res.status(401);
     return res.json("Not authenticated");
   }
 
