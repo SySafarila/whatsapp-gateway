@@ -33,4 +33,4 @@ whatsapp.on("authenticated", authenticated);
 whatsapp.on("disconnected", disconnected);
 whatsapp.on("qr", qr);
 whatsapp.on("message", message);
-// whatsapp.initialize();
+whatsapp.initialize();

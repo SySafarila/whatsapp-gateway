@@ -6,6 +6,7 @@ services:
     environment:
       NODE_ENV: production
       IS_DOCKER: true
+      JWT_SECRET: "secret"
     ports:
       - 3000:3000
     volumes:
