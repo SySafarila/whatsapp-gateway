@@ -13,6 +13,13 @@ export const login = (req, res) => {
   });
 };
 
+export const login_get = (req, res) => {
+  if (status.whatsapp_authenticated) {
+    return res.json("already authenticated");
+  }
+  res.send(`<img src="${status.whatsapp_qr_url}" />`);
+};
+
 export const logout = async (req, res) => {
   if (status.whatsapp_authenticated) {
     try {

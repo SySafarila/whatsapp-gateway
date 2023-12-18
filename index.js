@@ -1,7 +1,13 @@
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
-import { login, logout, root, send_message } from "./src/callbacks/backend.js";
+import {
+  login,
+  login_get,
+  logout,
+  root,
+  send_message,
+} from "./src/callbacks/backend.js";
 import {
   authenticated,
   disconnected,
@@ -21,6 +27,7 @@ app.use(cors());
 app.use(verify_token);
 app.get("/", root);
 app.post("/login", login);
+app.get("/login", login_get);
 app.post("/logout", logout);
 app.post("/send-message", send_message);
 app.listen(port, () => {
@@ -28,9 +35,9 @@ app.listen(port, () => {
 });
 
 // whatsapp
-whatsapp.on("ready", ready);
-whatsapp.on("authenticated", authenticated);
-whatsapp.on("disconnected", disconnected);
 whatsapp.on("qr", qr);
+whatsapp.on("authenticated", authenticated);
+whatsapp.on("ready", ready);
 whatsapp.on("message", message);
+whatsapp.on("disconnected", disconnected);
 whatsapp.initialize();
