@@ -1,6 +1,6 @@
 {
   "name": "whatsapp-gateway",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A WhatsApp Gateway by SySafarila",
   "private": true,
   "main": "index.js",
