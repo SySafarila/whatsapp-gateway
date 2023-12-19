@@ -26,7 +26,7 @@ export const login_get = (req, res) => {
   if (!clients[client_id]) {
     new wa(client_id);
   }
-  res.send(`<img src="${clients[client_id]?.qr ?? 'x'}" />`);
+  res.send(`<img src="${clients[client_id]?.qr ?? "x"}" />`);
 };
 
 export const logout = async (req, res) => {
@@ -48,21 +48,22 @@ export const logout = async (req, res) => {
 };
 
 export const send_message = async (req, res) => {
-  if (!status.whatsapp_authenticated) {
-    res.status(401);
-    return res.json("Not authenticated");
-  }
+  // if (!status.whatsapp_authenticated) {
+  //   res.status(401);
+  //   return res.json("Not authenticated");
+  // }
 
-  const { phone_number, message } = req.body;
-  if (!phone_number || !message) {
+  const { phone_number, message, client_id } = req.body;
+  if (!phone_number || !message || !client_id) {
     // validate requests
     res.status(400);
     return res.json("{phone_numnber} or {message} are required");
   }
 
   try {
+    const wx = clients[client_id].client;
     // sending message
-    const send = await whatsapp.sendMessage(`${phone_number}@c.us`, message);
+    const send = await wx.sendMessage(`${phone_number}@c.us`, message);
     console.log(`SEND STATUS: ${send.fromMe}`);
     return res.json(`SEND STATUS: ${send.fromMe}`);
   } catch (error) {
