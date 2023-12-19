@@ -21,10 +21,12 @@ export const login_get = (req, res) => {
   //   return res.json("already authenticated");
   // }
   if (!client_id) {
+    res.status(400);
     return res.json("client_id is required");
   }
   if (!clients[client_id]) {
     new wa(client_id);
+    res.json(`creating new client with id: ${client_id}`);
   }
   res.send(`<img src="${clients[client_id]?.qr ?? "x"}" />`);
 };
@@ -58,6 +60,11 @@ export const send_message = async (req, res) => {
     // validate requests
     res.status(400);
     return res.json("{phone_numnber} or {message} are required");
+  }
+
+  if (!clients[client_id]) {
+    res.status(400);
+    return res.json("client_id is not available yet");
   }
 
   try {
