@@ -17,6 +17,7 @@ import {
 } from "./src/callbacks/whatsapp.js";
 // import { client as whatsapp } from "./src/clients.js";
 import { verify_token } from "./src/middlewares.js";
+import { initializeCurrentSessions } from "./src/sessions.js";
 
 const app = express();
 const port = process.env.APP_PORT ?? 3000;
@@ -34,10 +35,4 @@ app.listen(port, () => {
   console.log(`Running on port ${port}`);
 });
 
-// whatsapp
-// whatsapp.on("qr", qr);
-// whatsapp.on("authenticated", authenticated);
-// whatsapp.on("ready", ready);
-// whatsapp.on("message", message);
-// whatsapp.on("disconnected", disconnected);
-// whatsapp.initialize();
+initializeCurrentSessions();

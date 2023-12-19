@@ -26,7 +26,7 @@ export const login_get = (req, res) => {
   }
   if (!clients[client_id]) {
     new wa(client_id);
-    res.json(`creating new client with id: ${client_id}`);
+    return res.json(`creating new client with id: ${client_id}`);
   }
   res.send(`<img src="${clients[client_id]?.qr ?? "x"}" />`);
 };

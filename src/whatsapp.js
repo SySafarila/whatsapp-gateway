@@ -1,8 +1,8 @@
 import "dotenv/config";
-import wwebjs from "whatsapp-web.js";
-const { Client, LocalAuth } = wwebjs;
-import { add_client } from "./clients.js";
 import QRCode from "qrcode";
+import wwebjs from "whatsapp-web.js";
+import { add_client } from "./clients.js";
+const { Client, LocalAuth } = wwebjs;
 
 export default class Whatsapp {
   /**
@@ -18,7 +18,7 @@ export default class Whatsapp {
       let qrr;
       QRCode.toDataURL(qr, (er, url) => {
         qrr = url;
-        console.log(`${this.client_id} QR: ${url}`);
+        console.log(`QRCode for ${this.client_id} is ready`);
         add_client(this.client_id, client, url, false);
       });
     });
@@ -34,9 +34,14 @@ export default class Whatsapp {
         message.react("👋");
       }
     });
-    client.on("disconnected", () => {
-      console.log(`${this.client_id} ready`);
-      add_client(this.client_id, client, null, false);
+    client.on("disconnected", async (reason) => {
+      try {
+        add_client(this.client_id, client, null, false);
+        client.initialize();
+        console.log(`${this.client_id} disconnected`);
+      } catch (error) {
+        //
+      }
     });
     client.initialize();
 
