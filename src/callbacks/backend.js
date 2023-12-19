@@ -1,4 +1,6 @@
-import { status, client as whatsapp } from "../clients.js";
+// import { status, client as whatsapp } from "../clients.js";
+import { clients } from "../clients.js";
+import wa from "../whatsapp.js";
 
 export const root = (req, res) => {
   res.json("Hello world!");
@@ -14,10 +16,17 @@ export const login = (req, res) => {
 };
 
 export const login_get = (req, res) => {
-  if (status.whatsapp_authenticated) {
-    return res.json("already authenticated");
+  const { client_id } = req.body;
+  // if (status.whatsapp_authenticated) {
+  //   return res.json("already authenticated");
+  // }
+  if (!client_id) {
+    return res.json("client_id is required");
   }
-  res.send(`<img src="${status.whatsapp_qr_url}" />`);
+  if (!clients[client_id]) {
+    new wa(client_id);
+  }
+  res.send(`<img src="${clients[client_id]?.qr ?? 'x'}" />`);
 };
 
 export const logout = async (req, res) => {

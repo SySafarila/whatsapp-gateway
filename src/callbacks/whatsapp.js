@@ -1,5 +1,5 @@
 import QRCode from "qrcode";
-import { status, client as whatsapp } from "../clients.js";
+// import { status, client as whatsapp } from "../clients.js";
 
 // done
 export const ready = () => {
