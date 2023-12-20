@@ -8,7 +8,7 @@ export let clients = [];
  * @param {boolean} auth
  * @returns client object
  */
-export const add_client = (client_id, client, qr = null, auth = false) => {
+export const set_client = (client_id, client, qr = null, auth = false) => {
   clients[client_id] = { client, qr, auth };
   return clients[client_id];
 };
