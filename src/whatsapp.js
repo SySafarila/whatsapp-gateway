@@ -3,6 +3,8 @@ import QRCode from "qrcode";
 import wwebjs from "whatsapp-web.js";
 import { add_client } from "./clients.js";
 const { Client, LocalAuth } = wwebjs;
+import fs from "node:fs";
+import path from "node:path";
 
 export default class Whatsapp {
   /**
@@ -15,9 +17,7 @@ export default class Whatsapp {
     const client = new Client(this.options(this.client_id));
 
     client.on("qr", (qr) => {
-      let qrr;
       QRCode.toDataURL(qr, (er, url) => {
-        qrr = url;
         console.log(`QRCode for ${this.client_id} is ready`);
         add_client(this.client_id, client, url, false);
       });
@@ -37,10 +37,10 @@ export default class Whatsapp {
     client.on("disconnected", async (reason) => {
       try {
         add_client(this.client_id, client, null, false);
-        client.initialize();
+        await this.add_to_disconnected_list(this.client_id);
         console.log(`${this.client_id} disconnected`);
       } catch (error) {
-        //
+        console.error(error);
       }
     });
     client.initialize();
@@ -75,5 +75,17 @@ export default class Whatsapp {
       };
     }
     return clientOptions;
+  }
+
+  async add_to_disconnected_list(client_id) {
+    fs.readdir(path.join(".disconnected_clients"), (error, cb) => {
+      if (error) {
+        fs.mkdirSync(path.join(".disconnected_clients"));
+      }
+      fs.writeFileSync(
+        path.join(`.disconnected_clients/${client_id}.json`),
+        ""
+      );
+    });
   }
 }

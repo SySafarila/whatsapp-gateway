@@ -1,6 +1,7 @@
 # wwebjs
 .wwebjs_auth
 .wwebjs_cache
+.disconnected_clients
 
 temp/
 

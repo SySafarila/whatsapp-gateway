@@ -28,6 +28,12 @@ export const login_get = (req, res) => {
     new wa(client_id);
     return res.json(`creating new client with id: ${client_id}`);
   }
+  if (clients[client_id].qr == null && clients[client_id].auth == true) {
+    return res.json(`${client_id} is already authenticated & active`);
+  }
+  if (clients[client_id].qr == null) {
+    return res.json(`QRCode for ${client_id} is not ready yet`);
+  }
   res.send(`<img src="${clients[client_id]?.qr ?? "x"}" />`);
 };
 
