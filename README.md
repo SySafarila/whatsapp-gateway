@@ -1,3 +1,13 @@
+## Notes
+Send message to specific user number, start the number with country code and end it with "@c.us"
+
+Example:
+```js
+client.sendMessage('6285155001528@c.us', 'your message here')
+```
+
+*Make sure Google Chrome already installed on your linux machine
+
 ## Run with docker compose
 ```bash
 docker compose up -d
@@ -11,10 +21,6 @@ cp .env.example .env && npm install && npm start
 - Login when client is ready
 - paste response from 'login' and display qr code on img html tag via src
 
-## Notes
-send message to specific user number, start the number with country code and end it with "@c.us"
+Or
 
-Example:
-```js
-client.sendMessage('6285155001528@c.us', 'your message here')
-```
+- Hit GET /login to get qr code
