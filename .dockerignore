@@ -33,8 +33,6 @@
 LICENSE
 README.md
 
-node_modules/
-
 .wwebjs_auth
 .wwebjs_cache
-temp/
+temp
