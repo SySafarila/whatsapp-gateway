@@ -9,7 +9,7 @@ if (process.env.IS_DOCKER == "true") {
   clientOptions = {
     authStrategy: new LocalAuth(),
     puppeteer: {
-      executablePath: "/usr/bin/google-chrome",
+      executablePath: "/usr/bin/chromium-browser",
       args: ["--disable-gpu", "--no-sandbox"],
     },
   };

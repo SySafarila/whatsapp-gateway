@@ -6,7 +6,7 @@ Example:
 client.sendMessage('6285155001528@c.us', 'your message here')
 ```
 
-*Make sure Google Chrome already installed on your linux machine
+*Make sure Google Chrome or Chromium already installed on your linux machine
 
 ## Run with docker compose
 ```bash
