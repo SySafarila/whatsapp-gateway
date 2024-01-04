@@ -4,6 +4,11 @@ import Whatsapp from "./whatsapp.js";
 
 export const initializeCurrentSessions = () => {
   try {
+    fs.readdir(path.join(".disconnected_clients"), (error, cb) => {
+      if (error) {
+        fs.mkdirSync(path.join(".disconnected_clients"));
+      }
+    });
     const disconnected_clients = fs.readdirSync(
       path.join(".disconnected_clients")
     );
@@ -30,3 +35,12 @@ export const initializeCurrentSessions = () => {
     console.log("sessions not found");
   }
 };
+
+export async function add_to_disconnected_list(client_id) {
+  fs.readdir(path.join(".disconnected_clients"), (error, cb) => {
+    if (error) {
+      fs.mkdirSync(path.join(".disconnected_clients"));
+    }
+    fs.writeFileSync(path.join(`.disconnected_clients/${client_id}.json`), "");
+  });
+}

@@ -1,66 +1,57 @@
-// import { status, client as whatsapp } from "../clients.js";
-import { clients } from "../clients.js";
+import { clients, set_client } from "../clients.js";
 import wa from "../whatsapp.js";
+import { add_to_disconnected_list } from "../sessions.js";
 
 export const root = (req, res) => {
   res.json("Hello world!");
 };
 
-export const login = (req, res) => {
-  if (status.whatsapp_authenticated) {
-    return res.json("already authenticated");
-  }
-  res.json({
-    image_src: status.whatsapp_qr_url,
-  });
-};
-
 export const login_get = (req, res) => {
-  const { client_id } = req.body;
-  // if (status.whatsapp_authenticated) {
-  //   return res.json("already authenticated");
-  // }
-  if (!client_id) {
-    res.status(400);
-    return res.json("client_id is required");
+  try {
+    const { client_id } = req.body;
+    if (!client_id) {
+      res.status(400);
+      return res.json("client_id is required");
+    }
+    if (!clients[client_id]) {
+      new wa(client_id);
+      return res.json(`creating new client with id: ${client_id}`);
+    }
+    if (clients[client_id].qr == null && clients[client_id].auth == true) {
+      return res.json(`${client_id} is already authenticated & active`);
+    }
+    if (clients[client_id].qr == null) {
+      return res.json(`QRCode for ${client_id} is not ready yet`);
+    }
+    res.send(`<img src="${clients[client_id]?.qr ?? "x"}" />`);
+  } catch (error) {
+    res.status(500);
+    return res.json("Internal server error");
   }
-  if (!clients[client_id]) {
-    new wa(client_id);
-    return res.json(`creating new client with id: ${client_id}`);
-  }
-  if (clients[client_id].qr == null && clients[client_id].auth == true) {
-    return res.json(`${client_id} is already authenticated & active`);
-  }
-  if (clients[client_id].qr == null) {
-    return res.json(`QRCode for ${client_id} is not ready yet`);
-  }
-  res.send(`<img src="${clients[client_id]?.qr ?? "x"}" />`);
 };
 
 export const logout = async (req, res) => {
-  if (status.whatsapp_authenticated) {
-    try {
-      await whatsapp.logout();
-      whatsapp.initialize();
-      status.set_auth = false;
-      status.set_qr = null;
-      console.log("logout success");
-      return res.json("Logout success");
-    } catch (error) {
-      res.status(500);
-      return res.json("logout failed");
+  try {
+    const { client_id } = req.body;
+    if (!clients[client_id]) {
+      res.status(404);
+      return res.json("client_id not found");
     }
+    if (clients[client_id].auth == true) {
+      await clients[client_id].client.logout();
+
+      set_client(client_id, clients[client_id].client, null, false);
+      await add_to_disconnected_list(client_id);
+
+      return res.json("logout success");
+    }
+  } catch (error) {
+    res.status(500);
+    return res.json("Internal server error");
   }
-  res.status(401);
-  res.json("Not authenticated");
 };
 
 export const send_message = async (req, res) => {
-  // if (!status.whatsapp_authenticated) {
-  //   res.status(401);
-  //   return res.json("Not authenticated");
-  // }
-
   const { phone_number, message, client_id } = req.body;
   if (!phone_number || !message || !client_id) {
     // validate requests
