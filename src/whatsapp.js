@@ -61,7 +61,7 @@ export default class Whatsapp {
           clientId: client_id,
         }),
         puppeteer: {
-          executablePath: "/usr/bin/google-chrome",
+          executablePath: "/usr/bin/chromium-browser",
           args: ["--disable-gpu", "--no-sandbox"],
         },
       };
